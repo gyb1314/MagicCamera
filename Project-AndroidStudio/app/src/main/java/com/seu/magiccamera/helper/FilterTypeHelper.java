@@ -46,6 +46,7 @@ public class FilterTypeHelper {
 			case VALENCIA:
 			case WALDEN:
 			case XPROII:
+			case TEST:
 				return R.color.filter_color_brown_dark;
 			case ANTIQUE:
 			case NOSTALGIA:
@@ -115,6 +116,8 @@ public class FilterTypeHelper {
 		case WALDEN:
 			return R.drawable.filter_thumb_walden;
 		case XPROII:
+			return R.drawable.filter_thumb_xpro;
+		case TEST:
 			return R.drawable.filter_thumb_xpro;
 		case ANTIQUE:
 			return R.drawable.filter_thumb_antique;
@@ -207,6 +210,8 @@ public class FilterTypeHelper {
 			return R.string.filter_walden;
 		case XPROII:
 			return R.string.filter_xproii;
+		case TEST:
+			return R.string.filter_test;
 		case ANTIQUE:
 			return R.string.filter_antique;
 		case CALM:

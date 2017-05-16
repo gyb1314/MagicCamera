@@ -2,7 +2,6 @@ package com.seu.magicfilter.filter.helper;
 
 import com.seu.magicfilter.filter.advanced.MagicAmaroFilter;
 import com.seu.magicfilter.filter.advanced.MagicAntiqueFilter;
-import com.seu.magicfilter.filter.advanced.MagicBlackCatFilter;
 import com.seu.magicfilter.filter.advanced.MagicBrannanFilter;
 import com.seu.magicfilter.filter.advanced.MagicBrooklynFilter;
 import com.seu.magicfilter.filter.advanced.MagicCalmFilter;
@@ -49,6 +48,7 @@ import com.seu.magicfilter.filter.base.gpuimage.GPUImageFilter;
 import com.seu.magicfilter.filter.base.gpuimage.GPUImageHueFilter;
 import com.seu.magicfilter.filter.base.gpuimage.GPUImageSaturationFilter;
 import com.seu.magicfilter.filter.base.gpuimage.GPUImageSharpenFilter;
+import com.seu.magicfilter.filter.extend.GPUImageTwoInputFilter;
 
 public class MagicFilterFactory{
 	
@@ -60,7 +60,8 @@ public class MagicFilterFactory{
 		case WHITECAT:
 			return new MagicWhiteCatFilter();
 		case BLACKCAT:
-			return new MagicBlackCatFilter();
+			return new MagicImageAdjustFilter();
+//			return new MagicBlackCatFilter();
 		case SKINWHITEN:
 			return new MagicSkinWhitenFilter();
 		case ROMANCE:
@@ -111,6 +112,8 @@ public class MagicFilterFactory{
 			return new MagicValenciaFilter();
 		case XPROII:
 			return new MagicXproIIFilter();
+		case TEST:
+			return new GPUImageTwoInputFilter();
 		case EVERGREEN:
 			return new MagicEvergreenFilter();
 		case HEALTHY:

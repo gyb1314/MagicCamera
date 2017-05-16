@@ -3,11 +3,13 @@ package com.seu.magicfilter.widget;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.opengl.EGL14;
 import android.opengl.GLES20;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 
 import com.seu.magicfilter.camera.CameraEngine;
@@ -15,6 +17,7 @@ import com.seu.magicfilter.camera.utils.CameraInfo;
 import com.seu.magicfilter.encoder.video.TextureMovieEncoder;
 import com.seu.magicfilter.filter.advanced.MagicBeautyFilter;
 import com.seu.magicfilter.filter.base.MagicCameraInputFilter;
+import com.seu.magicfilter.filter.extend.GPUImageTwoInputFilter;
 import com.seu.magicfilter.filter.helper.MagicFilterType;
 import com.seu.magicfilter.helper.SavePictureTask;
 import com.seu.magicfilter.utils.MagicParams;
@@ -56,6 +59,8 @@ public class MagicCameraView extends MagicBaseView {
 
     private File outputFile;
 
+    private Bitmap mBitmap = null;
+
     public MagicCameraView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.getHolder().addCallback(this);
@@ -82,6 +87,10 @@ public class MagicCameraView extends MagicBaseView {
                 surfaceTexture = new SurfaceTexture(textureId);
                 surfaceTexture.setOnFrameAvailableListener(onFrameAvailableListener);
             }
+        }
+        if(mBitmap == null) {
+            mBitmap = Bitmap.createBitmap(368,640, Bitmap.Config.ARGB_8888);
+            mBitmap.eraseColor(Color.parseColor("#110000"));
         }
     }
 
@@ -140,6 +149,14 @@ public class MagicCameraView extends MagicBaseView {
             cameraInputFilter.onDrawFrame(textureId, gLCubeBuffer, gLTextureBuffer);
         }else{
             id = cameraInputFilter.onDrawToTexture(textureId);
+            if(filter instanceof GPUImageTwoInputFilter){
+                GPUImageTwoInputFilter twointput = (GPUImageTwoInputFilter)filter;
+                if(!mBitmap.isRecycled()) {
+                    twointput.setRotation(Rotation.ROTATION_TEST,false,false);
+                    twointput.setBitmap(mBitmap);
+                }
+                Log.d("gyb","mBitmap = " + mBitmap);
+            }
             filter.onDrawFrame(id, gLCubeBuffer, gLTextureBuffer);
         }
         videoEncoder.setTextureId(id);
@@ -206,10 +223,15 @@ public class MagicCameraView extends MagicBaseView {
                 queueEvent(new Runnable() {
                     @Override
                     public void run() {
-                        final Bitmap photo = drawPhoto(bitmap,CameraEngine.getCameraInfo().isFront);
+                        Bitmap bitmap2 = drawPhoto(bitmap,CameraEngine.getCameraInfo().isFront);
+                        if(!mBitmap.isRecycled()){
+                            mBitmap.eraseColor(Color.parseColor("#110000"));
+                            mBitmap.recycle();
+                        }
+                        mBitmap = Bitmap.createBitmap(bitmap2, 0, 0, bitmap2.getWidth(), bitmap2.getHeight(), null, true);
                         GLES20.glViewport(0, 0, surfaceWidth, surfaceHeight);
-                        if (photo != null)
-                            savePictureTask.execute(photo);
+                        if (bitmap2 != null)
+                            savePictureTask.execute(bitmap2);
                     }
                 });
                 CameraEngine.startPreview();
@@ -271,6 +293,8 @@ public class MagicCameraView extends MagicBaseView {
             beautyFilter.onDrawFrame(textureId);
             filter.onDrawFrame(mFrameBufferTextures[0], gLCubeBuffer, gLTextureBuffer);
         }
+
+
         IntBuffer ib = IntBuffer.allocate(width * height);
         GLES20.glReadPixels(0, 0, width, height, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, ib);
         Bitmap result = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);

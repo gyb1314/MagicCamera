@@ -18,6 +18,13 @@ package com.seu.magicfilter.utils;
 
 public class TextureRotationUtil {
 
+    public static final float TEXTURE_NO_ROTATION_Test[] = {
+            0.2f, 0.8f,
+            0.8f, 0.8f,
+            0.2f, 0.2f,
+            0.8f, 0.2f,
+    };
+
     public static final float TEXTURE_NO_ROTATION[] = {
             0.0f, 1.0f,
             1.0f, 1.0f,
@@ -57,6 +64,9 @@ public class TextureRotationUtil {
                                                          final boolean flipVertical) {
         float[] rotatedTex;
         switch (rotation) {
+            case ROTATION_TEST:
+                rotatedTex = TEXTURE_NO_ROTATION_Test;
+                break;
             case ROTATION_90:
                 rotatedTex = TEXTURE_ROTATED_90;
                 break;

@@ -17,7 +17,7 @@
 package com.seu.magicfilter.utils;
 
 public enum Rotation {
-    NORMAL, ROTATION_90, ROTATION_180, ROTATION_270;
+    NORMAL, ROTATION_90, ROTATION_180, ROTATION_270,ROTATION_TEST;
 
     /**
      * Retrieves the int representation of the Rotation.
@@ -26,6 +26,7 @@ public enum Rotation {
      */
     public int asInt() {
         switch (this) {
+            case ROTATION_TEST:return 0;
             case NORMAL: return 0;
             case ROTATION_90: return 90;
             case ROTATION_180: return 180;

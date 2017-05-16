@@ -28,9 +28,6 @@ import com.seu.magicfilter.utils.MagicParams;
 import com.seu.magicfilter.widget.MagicCameraView;
 
 import java.io.File;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
 
 /**
  * Created by why8222 on 2016/3/17.
@@ -92,7 +89,8 @@ public class CameraActivity extends Activity{
             MagicFilterType.TOASTER2,
             MagicFilterType.VALENCIA,
             MagicFilterType.WALDEN,
-            MagicFilterType.XPROII
+            MagicFilterType.XPROII,
+            MagicFilterType.TEST
     };
 
     @Override
@@ -118,6 +116,7 @@ public class CameraActivity extends Activity{
         findViewById(R.id.btn_camera_switch).setOnClickListener(btn_listener);
         findViewById(R.id.btn_camera_mode).setOnClickListener(btn_listener);
         findViewById(R.id.btn_camera_beauty).setOnClickListener(btn_listener);
+        findViewById(R.id.btn_camera_effect).setOnClickListener(btn_listener);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -167,6 +166,10 @@ public class CameraActivity extends Activity{
             switch (v.getId()){
                 case R.id.btn_camera_mode:
                     switchMode();
+                    break;
+                case R.id.btn_camera_effect:
+                    // 测试灵魂出窍特效
+                    magicEngine.setFilter(MagicFilterType.TEST);
                     break;
                 case R.id.btn_camera_shutter:
                     if (PermissionChecker.checkSelfPermission(CameraActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE)
@@ -300,9 +303,11 @@ public class CameraActivity extends Activity{
                 return null;
             }
         }
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINESE).format(new Date());
+//        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.CHINESE).format(new Date());
+//        File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
+//                "IMG_" + timeStamp + ".jpg");
         File mediaFile = new File(mediaStorageDir.getPath() + File.separator +
-                "IMG_" + timeStamp + ".jpg");
+                "IMG_TEST.jpg");
 
         return mediaFile;
     }
